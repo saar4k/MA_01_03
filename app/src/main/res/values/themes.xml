@@ -1,0 +1,43 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MA_01_03" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="android:windowBackground">@color/background</item>
+
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:textSize">40sp</item> <!-- Textgröße -->
+        <item name="android:buttonStyle">@style/mainButtons</item>
+
+    </style>
+
+    <style name="mainButtons" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/dark_grey</item>
+        <item name="android:maxWidth">90dp</item>
+        <item name="android:maxHeight">90dp</item>
+        <item name="android:minWidth">90dp</item>
+        <item name="android:minHeight">90dp</item>
+        <item name="shapeAppearanceOverlay">@style/roundedCorners</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+
+
+
+    <style name="roundedCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item> <!-- 50% für komplett abgerundete Ecken -->
+    </style>
+
+</resources>
