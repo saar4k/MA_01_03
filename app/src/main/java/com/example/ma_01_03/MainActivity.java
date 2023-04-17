@@ -10,22 +10,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Scanner;
+
 public class MainActivity extends AppCompatActivity {
 
 
-static String textViewString = "0";
-
-
+    static String textViewString = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Textfeld für Ein- und Ausgabe
         TextView textView_01 = (TextView) findViewById(R.id.textViewResult);
-
-
-
 
         Button button0 = findViewById(R.id.button0);
         button0.setOnClickListener(new View.OnClickListener() {
@@ -55,10 +56,66 @@ static String textViewString = "0";
         buttonEquals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textViewString += "=";
+                Scanner in = new Scanner(textViewString.replace(',', '.'));
+                in.useLocale(Locale.GERMAN);
+
+                List<Double> numbers= new LinkedList<>();
+                List<String> operators= new LinkedList<>();
+
+                numbers.add(Double.parseDouble(in.next()));
+
+                while(in.hasNext()){
+                    operators.add(in.next());
+                    numbers.add(Double.parseDouble(in.next()));
+                }
+                in.close();
+
+                for(int i = 0; i < operators.size(); i++){
+                    double tmp = 0;
+                    switch(operators.get(i)){
+                        case "\u00F7":
+                            if(numbers.get(i+1) == 0){
+                                throw new IllegalArgumentException("Can not divide by 0!");
+                            }
+                            tmp += numbers.get(i) / numbers.get(i+1);
+                            numbers.remove(i);
+                            numbers.add(i, tmp);
+                            numbers.remove(i+1);
+                            operators.remove(i);
+                            break;
+
+                        case "\u00D7":
+                            tmp += numbers.get(i) * numbers.get(i+1);
+                            numbers.remove(i);
+                            numbers.add(i, tmp);
+                            numbers.remove(i+1);
+                            operators.remove(i);
+                            break;
+                    }
+                }
+
+                double result = numbers.get(0);
+
+                for(int i = 0; i < operators.size(); i++) {
+                    switch(operators.get(i)) {
+                        case "+":
+                            result += numbers.get(i+1);
+                            break;
+                        case "-":
+                            result -= numbers.get(i+1);
+                            break;
+
+                    }
+                }
+                if(result - Math.floor(result) == 0){
+                    textViewString = String.format("%.0f", result).replace('.', ',');
+                } else {
+                    textViewString = String.format("%.2f", result).replace('.', ',');
+                }
                 textView_01.setText(textViewString);
             }
         });
+
 
 
         Button button1 = findViewById(R.id.button1);
@@ -193,7 +250,7 @@ static String textViewString = "0";
         buttonplus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textViewString += "+";
+                textViewString += " + ";
                 textView_01.setText(textViewString);
             }
         });
@@ -203,7 +260,7 @@ static String textViewString = "0";
         buttonminus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textViewString += "-";
+                textViewString += " - ";
                 textView_01.setText(textViewString);
             }
         });
@@ -213,7 +270,7 @@ static String textViewString = "0";
         buttonX.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textViewString += "\u00D7";
+                textViewString += " \u00D7 ";
                 textView_01.setText(textViewString);
             }
         });
@@ -223,7 +280,7 @@ static String textViewString = "0";
         buttonDivision.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textViewString += "\u00F7";
+                textViewString += " \u00F7 ";
                 textView_01.setText(textViewString);
             }
         });
@@ -248,6 +305,8 @@ static String textViewString = "0";
                 // Ohne die Abfrage == 1, waere das Feld dann leer
                 if (textViewString == "0" || textViewString.length() == 1) {
                     textViewString = "0";
+                } else if (textViewString.charAt(textViewString.length()-1) == '\u0020') {
+                    textViewString = textViewString.substring(0, textViewString.length()-3);
                 } else {
                     textViewString = textViewString.substring(0, textViewString.length()-1);
                 }
