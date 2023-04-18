@@ -57,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Scanner in = new Scanner(textViewString.replace(',', '.'));
-                in.useLocale(Locale.GERMAN);
-
+                // 2 Listen mit Zahlen und Operatoren füllen
                 List<Double> numbers= new LinkedList<>();
                 List<String> operators= new LinkedList<>();
 
@@ -70,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 in.close();
 
+                // Erst die Punktrechnungen durchführen, Werte in Liste mit Ergebnissen überschreiben
+                // und 'verbrauchte' Operatoren und Zahlen löschen
                 for(int i = 0; i < operators.size(); i++){
                     double tmp = 0;
                     switch(operators.get(i)){
@@ -78,24 +79,23 @@ public class MainActivity extends AppCompatActivity {
                                 throw new IllegalArgumentException("Can not divide by 0!");
                             }
                             tmp += numbers.get(i) / numbers.get(i+1);
-                            numbers.remove(i);
-                            numbers.add(i, tmp);
+                            numbers.set(i, tmp);
                             numbers.remove(i+1);
                             operators.remove(i);
                             break;
 
                         case "\u00D7":
                             tmp += numbers.get(i) * numbers.get(i+1);
-                            numbers.remove(i);
-                            numbers.add(i, tmp);
+                            numbers.set(i, tmp);
                             numbers.remove(i+1);
                             operators.remove(i);
                             break;
                     }
                 }
 
-                double result = numbers.get(0);
 
+                //Strichrechnungen durchführen
+                double result = numbers.get(0);
                 for(int i = 0; i < operators.size(); i++) {
                     switch(operators.get(i)) {
                         case "+":
@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 }
+
+                //Formatierung -> Nachkommastellen (kann man auch beliebig anders machen)
                 if(result - Math.floor(result) == 0){
                     textViewString = String.format("%.0f", result).replace('.', ',');
                 } else {
